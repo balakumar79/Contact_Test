@@ -1,4 +1,5 @@
-﻿using Contact_Test.Models;
+﻿using Contact_Test.Data;
+using Contact_Test.Models;
 using System.Collections.Generic;
 
 namespace Contact_Test.Repository
@@ -11,5 +12,6 @@ namespace Contact_Test.Repository
         ContactModel GetContact(int id);
         IEnumerable<ContactModel> GetContacts();
         bool IsEmailExists(string email, int id);
+        IEnumerable<Country> GetCountries();
     }
 }

@@ -1,8 +1,13 @@
-﻿using Contact_Test.Models;
+﻿using Contact_Test.ModelFactory.Interface;
+using Contact_Test.Models;
 using Contact_Test.Repository;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 
 namespace Contact_Test.Controllers
 {
@@ -10,30 +15,58 @@ namespace Contact_Test.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IContactRepository _contactRepository;
+        private readonly IContactModelFactory _contactModelFactory;
+        private IHostingEnvironment _hostingEnvironment;
 
-        public HomeController(ILogger<HomeController> logger, IContactRepository contactRepository)
+        public HomeController(ILogger<HomeController> logger, IContactRepository contactRepository, IContactModelFactory contactModelFactory,
+            IHostingEnvironment hostingEnvironment)
         {
             _logger = logger;
             _contactRepository = contactRepository;
+            _contactModelFactory = contactModelFactory;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index()
         {
-            var model = _contactRepository.GetContacts();
+            var model = _contactRepository.GetContacts().OrderByDescending(s => s.CreatedDate);
             return View(model);
         }
         public IActionResult Contact(int id)
         {
             if (id > 0)
-                return View(_contactRepository.GetContact(id));
+            {
+                var model = _contactRepository.GetContact(id);
+                model = _contactModelFactory.PrepareContactModel(model);
+                return View(model);
+
+            }
             else
-                return View(new ContactModel());
+            {
+
+                return View(_contactModelFactory.PrepareContactModel(new ContactModel()));
+            }
         }
         [HttpPost]
-        public IActionResult Contact(ContactModel model)
+        public IActionResult Contact(ContactModel model, [FromForm] IFormFile File)
         {
+
             if (ModelState.IsValid)
             {
+                if (File != null)
+                {
+                    var dirc = "Files";
+                    string filePath = Path.Combine(_hostingEnvironment.WebRootPath, dirc);
+                    if (!Directory.Exists(filePath))
+                        Directory.CreateDirectory(filePath);
+                    var fileName = File.FileName;
+                    var path = Path.Combine(filePath, fileName);
+                    using (var fs = System.IO.File.Create(path))
+                    {
+                        File.CopyTo(fs);
+                        model.ProfileImage = fileName;
+                    }
+                }
                 if (_contactRepository.UpdateContact(model))
                     return RedirectToAction(nameof(Index));
 

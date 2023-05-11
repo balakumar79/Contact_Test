@@ -10,18 +10,18 @@ namespace Contact_Test.Data
             set;
         }
 
-        public int CreatedBy
+        public int? CreatedBy
         {
             get;
             set;
         }
 
-        public DateTime CreatedDate
+        public DateTime? CreatedDate
         {
             get;
             set;
         } = DateTime.Now;
-        public DateTime ModifiedDate
+        public DateTime? ModifiedDate
         {
             get;
             set;

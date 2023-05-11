@@ -4,14 +4,16 @@ using Contact_Test.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Contact_Test.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230511104716_removed-state")]
+    partial class removedstate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,10 +37,10 @@ namespace Contact_Test.Migrations
                     b.Property<int>("Country")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CreatedBy")
+                    b.Property<int>("CreatedBy")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -53,7 +55,7 @@ namespace Contact_Test.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PhoneNumber")
@@ -68,36 +70,6 @@ namespace Contact_Test.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Contacts");
-                });
-
-            modelBuilder.Entity("Contact_Test.Data.Country", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CountryCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CountryName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Countries");
                 });
 #pragma warning restore 612, 618
         }

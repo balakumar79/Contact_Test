@@ -48,7 +48,11 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
     <script>
-        $('table').DataTable();
+        $(document).ready(function () {
+            $('table').DataTable({
+                //order: [[7, 'desc']],
+            });
+        });
     </script>
 </body>
 </html>

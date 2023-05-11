@@ -1,6 +1,8 @@
 using AutoMapper;
 using Contact_Test.Data;
 using Contact_Test.Mapper;
+using Contact_Test.ModelFactory;
+using Contact_Test.ModelFactory.Interface;
 using Contact_Test.Repository;
 using Contact_Test.Repository.Generic;
 using Microsoft.AspNetCore.Builder;
@@ -28,8 +30,12 @@ namespace Contact_Test
             {
                 serv.UseSqlServer(Configuration.GetConnectionString("DbContext"));
             });
+
             services.AddTransient<IRepository<Contact>, Repository<Contact>>();
+            services.AddTransient<IRepository<Country>, Repository<Country>>();
             services.AddTransient<IContactRepository, ContactRepository>();
+            services.AddTransient<IContactModelFactory, ContactModelFactory>();
+
             var config = new MapperConfiguration(cfg =>
 
                   cfg.AddProfile(new MapperProfile())
@@ -37,7 +43,7 @@ namespace Contact_Test
               );
             IMapper mappermapper = config.CreateMapper();
             services.AddSingleton(mappermapper);
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

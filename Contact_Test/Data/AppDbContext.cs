@@ -9,6 +9,7 @@ namespace Contact_Test.Data
 
         }
         public virtual DbSet<Contact> Contacts { get; set; }
+        public virtual DbSet<Country> Countries { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
